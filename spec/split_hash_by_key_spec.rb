@@ -15,14 +15,10 @@ describe 'split_hash_by_key' do
     expect(split_hash_by_key({:a => 1, :b => 2}, :a)).to eq([{:a => 1, :b => 2}])
   end
 
-  it 'should be correct when key is string or symbol' do
 
-    expect(split_hash_by_key({:a => 1, :b => 2, :c=>3}, :b)).to eq([{:a => 1},{:b => 2,:c=>3}])
-    expect(split_hash_by_key({:a => 1, :b => 2, :c=>3}, 'b')).to eq([{:a => 1},{:b => 2,:c=>3}])
-  end
 
   it 'it should raise SplitError when hash does not has key ' do
-    expect{split_hash_by_key({:a => 1, :b => 2}, :c)}.to raise_error(SplitError)
+    expect{split_hash_by_key({:a => 1, :b => 2}, 'a')}.to raise_error(SplitError)
   end
 
 end

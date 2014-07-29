@@ -3,6 +3,7 @@ require_relative '../src/fizz_buzz'
 
 describe 'FizzBuzz' do
 
+
   it 'should return fizz when diviedable 3' do
 
     fizz_buzz(6).should =='fizz'
