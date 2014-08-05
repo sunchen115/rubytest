@@ -15,12 +15,12 @@ describe 'FizzBuzz' do
     fizz_buzz(10).should == 'buzz'
   end
 
-
+context  "test15" do
   it 'should return buzz when dividable 15' do
 
     fizz_buzz(15).should == 'fizzbuzz'
   end
-
+end
   it 'should return empty when cat not divid by 3 and 5' do
 
     fizz_buzz(4).should == ''
