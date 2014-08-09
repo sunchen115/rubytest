@@ -18,7 +18,7 @@ class Roman
       end
 
     end
-  res_str
+    res_str
   end
 
 
