@@ -3,11 +3,11 @@ require_relative "./input_output_trans"
 
 
 class ErrorsExtractor
-  attr_reader :intput_filename, :errors_info
+  attr_reader :intput_filename, :errors_info, :cluster_rules
 
   def initialize(*filenames)
     @input_filename = filenames
-
+    @cluster_rules={}
     @errors_info = {}
   end
 
@@ -15,20 +15,8 @@ class ErrorsExtractor
     JSON.parse str_json
   end
 
-  def record_errors info
-    info.fetch('errors', {}).each do |key, value|
-      @errors_info[key]=[] unless @errors_info.has_key?(key)
-      value = [value] if value.is_a?(String)
-      @errors_info[key].concat(value)
-    end
 
-  end
 
-  def unescape(src)
-
-    String.class_eval(%Q("#{src}"))
-
-  end
 
   # def _extract_err(raw_info)
   #   log_level = raw_info[0, 10]
@@ -56,12 +44,11 @@ class ErrorsExtractor
   #   export_to_file
   # end
 
-  def show_extract_info(status_info)
-    map_info = {0 => 'suc', 1 => 'not include[err]', 2 => 'parse fail'}
-    print map_info.map { |key, value| "#{value}[#{status_info[key]}]" }.join(",")+"\n"
-  end
 
-  def extract_from_txt(out_file = './output.txt', cut_by_spot=false)
+
+  def extract_from_txt(out_file = './output.txt', cluster_file="./cluster_rule", cut_by_spot=false)
+
+    @cluster_rules = _load_cluster_rules cluster_file
     status_code_info = [0, 0, 0]
     @input_filename.each do |input_file|
       if  File.exist?(input_file)
@@ -98,6 +85,33 @@ class ErrorsExtractor
 
 
   private
+
+  def show_extract_info(status_info)
+    map_info = {0 => 'suc', 1 => 'not include[err]', 2 => 'parse fail'}
+    print map_info.map { |key, value| "#{value}[#{status_info[key]}]" }.join(",")+"\n"
+  end
+
+  def _record_errors info
+    info.fetch('errors', {}).each do |key, value|
+      @errors_info[key]=[] unless @errors_info.has_key?(key)
+      value = [value] if value.is_a?(String)
+      value.each do |val|
+        ori_val = val
+        val=_update_by_cluster_rule(key, val);
+
+        @errors_info[key]<<val unless @errors_info[key].include? val
+      end
+    end
+    #@errors_info[key].concat(value)
+    #p @errors_info['suburb']
+  end
+
+  def _update_by_cluster_rule(key, value)
+    return value unless @cluster_rules.has_key? key
+    rule = @cluster_rules[key].select { |rule| not value.match(rule).nil? }
+    rule.any? ? rule[0] : value
+  end
+
   def export_to_file(out_f = './output.txt', cut_by_spot=false)
     OutputTrans.export(out_f, @errors_info, cut_by_spot)
   end
@@ -109,7 +123,7 @@ class ErrorsExtractor
 
         error_info = raw_info.scan(/} - (.*?):(.*)/)[0]
 
-        record_errors 'errors' => {error_info[0] => error_info[1]}
+        _record_errors 'errors' => {error_info[0] => error_info[1]}
         return 0
       rescue => e
         #p e
@@ -131,7 +145,7 @@ class ErrorsExtractor
         error_info = error_info.gsub(/\\\"/, '"').gsub(/\\\"/, '"')
 
         error_hash_single = json_2_hash error_info
-        record_errors error_hash_single
+        _record_errors error_hash_single
         return 0
       rescue => e
         #p e
@@ -143,6 +157,25 @@ class ErrorsExtractor
 
   end
 
+  def _load_cluster_rules rule_file
+    rules_info = {}
+    File.open(rule_file) do |file|
+      while line=file.gets
+        line=line.strip()
+        if line=="" or line[0]=='#'
+          next
+        end
+        rule_info = line.split("\t")
+        key = rule_info[0]
+        val = rule_info[1]
+        unless rules_info.has_key?(key)
+          rules_info[key]=[]
+        end
+        rules_info[key]<< val
+      end
+    end
+    rules_info
+  end
 end
 
 # ErrorsExtractor.new("./sample_errors_json").get_errors
@@ -151,5 +184,7 @@ end
 # ErrorsExtractor.new("./rex-consumer-24hours.txt").extract_from_txt("./comsumer_output.txt",false)
 # ErrorsExtractor.new("./rex-spilter-24hours.txt").extract_from_txt("./split_output.txt",false)
 
-#ErrorsExtractor.new("./rex-consumer-24hours.txt","./rex-spilter-24hours.txt").extract_from_txt("./total_output.txt",false)
-ErrorsExtractor.new("./en-reaxml.yml").extract_from_yaml
+#ErrorsExtractor.new("./input/rex-consumer-24hours.txt", "./input/rex-spilter-24hours.txt").extract_from_txt("./output/total_output.txt", "./input/cluster_rule", false)
+ErrorsExtractor.new("./input/rex-consumer-30days.txt","./input/rex-spliter-30days.txt").extract_from_txt("./output/30day_errs.txt","./input/cluster_rule")
+
+# ErrorsExtractor.new("./en-reaxml.yml").extract_from_yaml

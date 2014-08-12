@@ -1,0 +1,19 @@
+suburb	Invalid suburb.*
+username	Agent/provider mismatch: Data imports have not been activated for your office\. Please contact your bulk uploader .* for more information
+username	Invalid password: Incorrect username or password: user.*
+street	You already have a listing with the same address\. To get more exposure and enquiries, you can  upgrade your existing listing .* For more information please read our Acceptable Use Policy\.
+street	You already have an active listing with the same address\. To get more exposure and enquiries, you can upgrade your listing .*For more information please read our Acceptable Use Policy\.
+objects.floorplan.attachment	Floorplan.*was unavailable via URL .*
+objects.floorplan.id	Invalid ID .*
+objects.img.attachment	Image.*was not available. Please remove this image from your bulk uploader and re-feed
+images.img.attachment	Image .* was not available\. Please remove this image from your bulk uploader and re-feed
+objects.document.attachment	Document .* was unavailable via URL.*
+RuntimeError	Received a message for a file that doesn't exist.*
+RuntimeError	unzip of .* failed
+RuntimeError	multiple XML files in upload -.*
+RuntimeError	Can't move file \(Failed Processing\) because it doesn't exist at.*
+RuntimeError	 failed to process uploaded files - response.*
+links	ExternalLink.*
+RuntimeError	failed to call processed_listing API with status 404 - response: "Couldn't find CPDomain::Legacy::Xmlfiles with ID=.*"
+RuntimeError	multiple XML files in upload
+inspection_times.inspections	Invalid InspectionTimes format.*
