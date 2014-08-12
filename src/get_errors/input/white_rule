@@ -1,0 +1,4 @@
+TypeError	.*
+NoMethodError	.*
+RexCommon	.*
+RuntimeError	.*

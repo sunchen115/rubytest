@@ -3,12 +3,13 @@ require_relative "./input_output_trans"
 
 
 class ErrorsExtractor
-  attr_reader :intput_filename, :errors_info, :cluster_rules
+  attr_reader :intput_filename, :errors_info, :cluster_rules,:white_rules
 
   def initialize(*filenames)
     @input_filename = filenames
     @cluster_rules={}
     @errors_info = {}
+    @white_rules={}
   end
 
   def json_2_hash(str_json)
@@ -43,9 +44,10 @@ class ErrorsExtractor
   # end
 
 
-  def extract_from_txt(out_file = './output.txt', cluster_file="./cluster_rule", cut_by_spot=false)
+  def extract_from_txt(out_file = './output.txt', cluster_file="./cluster_rule", white_file='',cut_by_spot=false)
 
-    @cluster_rules = _load_cluster_rules cluster_file
+    @cluster_rules = _load_2cols_rules cluster_file
+    @white_rules = _load_2cols_rules white_file
     status_code_info = [0, 0, 0]
     @input_filename.each do |input_file|
       if  File.exist?(input_file)
@@ -110,7 +112,7 @@ class ErrorsExtractor
   end
 
   def export_to_file(out_f = './output.txt', cut_by_spot=false)
-    OutputTrans.export(out_f, @errors_info, cut_by_spot)
+    OutputTrans.export(out_f, @errors_info,@white_rules,cut_by_spot)
   end
 
   def _extract_err_string(raw_info)
@@ -154,7 +156,7 @@ class ErrorsExtractor
 
   end
 
-  def _load_cluster_rules rule_file
+  def _load_2cols_rules rule_file
     rules_info = {}
     File.open(rule_file) do |file|
       while line=file.gets
@@ -181,7 +183,7 @@ end
 # ErrorsExtractor.new("./rex-consumer-24hours.txt").extract_from_txt("./comsumer_output.txt",false)
 # ErrorsExtractor.new("./rex-spilter-24hours.txt").extract_from_txt("./split_output.txt",false)
 
-#ErrorsExtractor.new("./input/rex-consumer-24hours.txt", "./input/rex-spilter-24hours.txt").extract_from_txt("./output/total_output.txt", "./input/cluster_rule", false)
-ErrorsExtractor.new("./input/rex-consumer-30days.txt", "./input/rex-spliter-30days.txt").extract_from_txt("./output/30day_errs.txt", "./input/cluster_rule")
+#ErrorsExtractor.new("./input/rex-consumer-24hours.txt", "./input/rex-spilter-24hours.txt").extract_from_txt("./output/total_output.txt", "./input/cluster_rule",'./input/white_rule', false)
+ErrorsExtractor.new("./input/rex-consumer-30days.txt", "./input/rex-spliter-30days.txt").extract_from_txt("./output/30day_errs.txt", "./input/cluster_rule",'./input/white_rule')
 
 # ErrorsExtractor.new("./en-reaxml.yml").extract_from_yaml

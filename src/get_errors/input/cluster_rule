@@ -17,3 +17,6 @@ links	ExternalLink.*
 RuntimeError	failed to call processed_listing API with status 404 - response: "Couldn't find CPDomain::Legacy::Xmlfiles with ID=.*"
 RuntimeError	multiple XML files in upload
 inspection_times.inspections	Invalid InspectionTimes format.*
+authority.value	Invalid commercial authority:.*
+commercial_category.name	Invalid commercialCategory: .*
+exclusivity	Invalid exclusivity value: ".*"
