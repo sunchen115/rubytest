@@ -16,8 +16,6 @@ class ErrorsExtractor
   end
 
 
-
-
   # def _extract_err(raw_info)
   #   log_level = raw_info[0, 10]
   #   if log_level.include?('err')
@@ -43,7 +41,6 @@ class ErrorsExtractor
   #   @errors_info.each { |key, value| value.uniq! }
   #   export_to_file
   # end
-
 
 
   def extract_from_txt(out_file = './output.txt', cluster_file="./cluster_rule", cut_by_spot=false)
@@ -185,6 +182,6 @@ end
 # ErrorsExtractor.new("./rex-spilter-24hours.txt").extract_from_txt("./split_output.txt",false)
 
 #ErrorsExtractor.new("./input/rex-consumer-24hours.txt", "./input/rex-spilter-24hours.txt").extract_from_txt("./output/total_output.txt", "./input/cluster_rule", false)
-ErrorsExtractor.new("./input/rex-consumer-30days.txt","./input/rex-spliter-30days.txt").extract_from_txt("./output/30day_errs.txt","./input/cluster_rule")
+ErrorsExtractor.new("./input/rex-consumer-30days.txt", "./input/rex-spliter-30days.txt").extract_from_txt("./output/30day_errs.txt", "./input/cluster_rule")
 
 # ErrorsExtractor.new("./en-reaxml.yml").extract_from_yaml
