@@ -1,0 +1,9 @@
+%h1 Welcome to Regist
+%span #{usrinfo.errors}
+%form#frm_regist{'action'=>'regist','method'=>'post'}
+  %label Username
+  %input#usrname{'name'=>'username', 'value'=>"#{usrinfo.name}"}
+  %label Password
+  %input#password{'type'=>'password','name'=>'pwd','value'=>"#{usrinfo.password}"}
+  %input{'type'=>'submit','id'=>'sub_regist','value'=>'Regist'}
+  %a#to_login{'href'=>'/login'} Back to Login

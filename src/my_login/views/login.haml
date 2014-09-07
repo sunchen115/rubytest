@@ -1,0 +1,12 @@
+%html
+  %title login
+  %body
+    %h1 Welcome to login
+    %div#error_msgs #{errors}
+    %form#frm_login{'action'=>'login','method'=>'post'}
+      %label Username
+      %input{'id'=>'username','name'=>'username'}
+      %label Password
+      %input{'id'=>'pwd','name'=>'pwd','type'=>'password'}
+      %input{'type'=>'submit','id'=>'sub_login','value'=>'Login'}
+      %a{'href'=>'/regist'} Regist
