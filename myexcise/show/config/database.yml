@@ -1,0 +1,10 @@
+development:
+  adapter: mysql2
+  host: localhost
+  port: 3306
+  username: root
+  password:
+  database: PSeeker
+  pool: 5
+  checkout_timeout: 2
+  dead_connection_timeout : 5

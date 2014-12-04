@@ -1,0 +1,4 @@
+source "http://ruby.taobao.org/"
+gem 'byebug'
+gem 'activerecord', '4.1.6'
+#gem "sinatra-activerecord",'2.0.3'
