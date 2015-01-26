@@ -1,4 +1,4 @@
-name_list = %w(sc oy ct fj jp dj)
+name_list = %w(sunchen ouyang caitong fengjia jp dujuan)
 
 
 def fetch_random(list)
